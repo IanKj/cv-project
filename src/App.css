@@ -25,11 +25,26 @@ body {
 
 .education {
   grid-area: education;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .experience {
   grid-area: experience;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
 } 
+
+.jobContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+  min-height: 250px;
+}
 
 .header{
   padding-left: 20px;
@@ -39,14 +54,25 @@ body {
   justify-content: space-around;
 }
 
-.sectionContainer button {
+.skillsMisc {
+  grid-area: skillsMisc;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+
+.editButton {
   position: absolute;
   top: 0px;
   right: 0px;
 }
 
-.skillsMisc {
-  grid-area: skillsMisc;
+.addJobButton {
+  position: absolute;
+  top: 30px;
+  right: 0px;
 }
 
 .sectionContainer {

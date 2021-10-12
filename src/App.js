@@ -36,6 +36,24 @@ class App extends React.Component {
       },
       skillsMiscInfo: {
         editMode: false,
+        awards: [
+          {
+            name: "employee of the quarter",
+            location: 'Department of Corrections',
+            whenOccurred: 'December, 2021'
+          },
+          {
+            name: "employee of the quarter",
+            location: 'Department of Corrections',
+            whenOccurred: 'December, 2021'
+          }
+        ],
+        skills:
+          [
+            'verbal deescalation',
+            'firearm proficiency',
+            'teamwork'
+          ]
       },
       experienceInfo: {
         editMode: false,
@@ -44,23 +62,21 @@ class App extends React.Component {
             title: "Community Corrections Officer",
             employer: "Washington State",
             employmentLength: 4,
-            duties: 'manage caseload blah blah blah blah'
+            duties: 'manage caseload blah blah blah blah',
+            id: 0
           }
         ]
-
-
       }
     }
     this.handleEditButton = this.handleEditButton.bind(this)
+    this.handleAddJob = this.handleAddJob.bind(this)
+    this.handleDeleteJob = this.handleDeleteJob.bind(this)
   }
 
   handleEditButton(e) {
     const { name } = e.target
-    console.log(name)
-    console.log(e.target.parentElement)
     const editLabel = `${name}EditMode`
     const sectionInfo = `${name}Info`
-    console.log(sectionInfo)
     const editModeActive = this.state[sectionInfo].editMode
     if (!editModeActive) {
       this.setState({
@@ -76,26 +92,27 @@ class App extends React.Component {
         let updatedSectionInfo = {}
         for (let [key, value] of Object.entries(prevState[sectionInfo])) {
           if (key === 'jobs') {
+            const jobArr = []
             const parentElement = e.target.parentElement
             parentElement.childNodes.forEach(child => {
               if (child.className === 'jobContainer') {
+                const job = {}
                 child.childNodes.forEach(input => {
-                  console.log(input)
+                  job[input.name] = input.value ? input.value : input.placeholder
                 })
-
+                jobArr.push(job)
               }
+
             })
-            const currJobs = prevState[sectionInfo][key]
-            currJobs.forEach(job => {
-            })
+            updatedSectionInfo[key] = jobArr
           }
           else {
             for (let input of e.target.parentElement.childNodes) {
 
               if (key === input.name && input.tagName === "INPUT") {
-                console.log('inside if statement')
                 if (!input.value) {
                   value = input.placeholder
+
                 }
                 else {
                   value = input.value
@@ -112,12 +129,56 @@ class App extends React.Component {
     }
   }
 
+  handleAddJob() {
+    console.log('clicked add job button!')
+    this.setState(prevState => {
+      const newJob = {
+        title: "Sample Job Here",
+        employer: "Employer",
+        employmentLength: 'how long employed?',
+        duties: 'what did you do?',
+        id: prevState.experienceInfo.jobs.length
+      }
+      const updatedJobs = [...prevState.experienceInfo.jobs, newJob]
+      const updatedExperience = { editMode: true }
+      updatedExperience.jobs = [...updatedJobs]
+      return { experienceInfo: updatedExperience }
+    })
+  }
+
+  handleDeleteJob(e) {
+    const jobToDelete = e.target.parentElement.id
+    this.setState(prevState => {
+      const updatedExperience = { editMode: true }
+
+      let updatedJobs = prevState.experienceInfo.jobs
+        .filter(job => {
+          return job.id !== parseInt(jobToDelete)
+        })
+        .map((job, index) => {
+          return {
+            id: index,
+            title: job.title,
+            employer: job.employer,
+            employmentLength: job.employmentLength,
+            duties: job.duties,
+          }
+        })
+
+
+      console.log(updatedJobs)
+      updatedExperience.jobs = [...updatedJobs]
+      console.log(updatedExperience)
+      return { experienceInfo: updatedExperience }
+    })
+  }
+
   render() {
     return (
       <div className='appUI'>
         <Header content={this.state.headerInfo} handleEditButton={this.handleEditButton} name='header' />
         <ContactInfo content={this.state.contactInfo} handleEditButton={this.handleEditButton} name='contact' />
-        <Experience content={this.state.experienceInfo} handleEditButton={this.handleEditButton} name='experience' />
+        <Experience content={this.state.experienceInfo} handleDeleteJob={this.handleDeleteJob} handleAddJob={this.handleAddJob} handleEditButton={this.handleEditButton} name='experience' />
         <Education content={this.state.educationInfo} handleEditButton={this.handleEditButton} name='education' />
         <SkillsMisc content={this.state.skillsMiscInfo} handleEditButton={this.handleEditButton} name='skillsMisc' />
       </div>
