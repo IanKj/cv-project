@@ -11,10 +11,6 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      contactInfoEditMode: false,
-      educationEditMode: false,
-      experienceEditMode: false,
-      skillsMiscEditMode: false,
       headerInfo: {
         fullName: 'Ian',
         position: 'Front End Web Developer',
@@ -105,6 +101,33 @@ class App extends React.Component {
 
             })
             updatedSectionInfo[key] = jobArr
+          }
+          else if (key === 'awards' || key === 'skills') {
+            const skillsArr = []
+            const awardsArr = []
+            const parentElement = e.target.parentElement
+            parentElement.childNodes.forEach(child => {
+              if (child.className === 'skillsContainer') {
+                child.childNodes.forEach(input => {
+                  skillsArr.push(input.value ? input.value : input.placeholder)
+                })
+              }
+              if (child.className === 'awardsContainer') {
+
+                child.childNodes.forEach(award => {
+                  const updatedAward = {}
+                  award.childNodes.forEach(input => {
+                    updatedAward[input.name] = input.value ? input.value : input.placeholder
+                  })
+
+                  awardsArr.push(updatedAward)
+                })
+
+              }
+            })
+            console.log(awardsArr)
+            updatedSectionInfo.skills = skillsArr
+            updatedSectionInfo.awards = awardsArr
           }
           else {
             for (let input of e.target.parentElement.childNodes) {

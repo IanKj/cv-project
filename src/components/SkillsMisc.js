@@ -6,15 +6,18 @@ function SkillsMisc(props) {
 
     const { handleEditButton, name } = props
     const { editMode, skills, awards } = props.content
-    console.log(props.content)
     const skillsDOM = skills.map(skill => {
         return editMode ?
             <input
                 type='text'
                 name="skill"
-                placeholder={skill}>
-            </input> :
-            <li>{skill}</li>
+                placeholder={skill}
+            /> :
+            <div>
+                <ul>
+                    <li>{skill}</li>
+                </ul>
+            </div>
     })
 
     const awardsDOM = awards.map(award => {
@@ -22,17 +25,17 @@ function SkillsMisc(props) {
             <div>
                 <input
                     type='text'
-                    name={`${award.name}`}
+                    name='name'
                     placeholder={award.name}>
                 </input>
                 <input
                     type='text'
-                    name={`${award.location}`}
+                    name='location'
                     placeholder={award.location}>
                 </input>
                 <input
                     type='text'
-                    name={`${award.whenOccurred}`}
+                    name='whenOccurred'
                     placeholder={award.whenOccurred}>
                 </input>
             </div>
@@ -51,9 +54,9 @@ function SkillsMisc(props) {
     return (
         <div className="skillsMisc sectionContainer">
             <h2>Awards</h2>
-            <div>{awardsDOM}</div>
+            <div className="awardsContainer">{awardsDOM}</div>
             <h2>Skills</h2>
-            <ul>{skillsDOM}</ul>
+            <div className="skillsContainer">{skillsDOM}</div>
 
 
             <EditButton editMode={editMode} handleEditButton={handleEditButton} name={name} />
